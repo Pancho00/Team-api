@@ -6,8 +6,8 @@
   "scripts": {
     "lint": "eslint ./src/*.js ./src/**/*.js",
     "build": "babel ./src/app.js -d dist",
-    "dev": "NODE_ENV=dev nodemon --exec babel-node ./src/app.js",
-    "test": "NODE_ENV=test jest",
+    "dev": "set NODE_ENV=dev&& nodemon --exec babel-node ./src/app.js",
+    "test": "set NODE_ENV=test&& jest",
     "coverage": "jest --coverage"
   },
   "keywords": [],
@@ -21,6 +21,7 @@
     "express": "^4.18.2",
     "joi": "^17.11.0",
     "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.2.0",
     "mongoose": "^7.6.2",
     "winston": "^3.11.0"
   },
