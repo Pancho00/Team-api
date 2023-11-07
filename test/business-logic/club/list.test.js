@@ -6,15 +6,11 @@ import UserModel from '../../../src/models/user/user.model';
 import list from '../../../src/business-logic/club/list';
 
 describe('Business logic: Club: List', () => {
-    beforeAll(async () => {
-        await ClubModel.deleteMany({});
-        await UserModel.deleteMany({});
-    });
 
     afterEach(async () => {
         jest.resetAllMocks();
-        // await UserModel.deleteMany({});
-        // await ClubModel.deleteMany({});
+        await UserModel.deleteMany({});
+        await ClubModel.deleteMany({});
     });
 
     it('should return an empty list when there are no clubs in the database', async () => {
