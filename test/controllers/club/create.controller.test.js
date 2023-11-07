@@ -78,7 +78,7 @@ describe('Controller: Club: Create club', () => {
     expect(ClubLogic.create).not.toHaveBeenCalled();
   });
 
-  it('Should throw an error when the logic fails', async () => {
+  test('Should throw an error when the logic fails', async () => {
     const error = new HTTPError({ name: 'error', message: 'some-error', code: 400 });
 
     ClubLogic.create.mockRejectedValue(error);
