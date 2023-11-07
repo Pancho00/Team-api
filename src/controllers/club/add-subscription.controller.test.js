@@ -1,17 +1,17 @@
 import { expect, jest } from '@jest/globals';
-import addMemberController from '../../../src/controllers/club/add-member.controller';
-import MemberLogic from '../../../src/business-logic/member';
+import addSubscriptionController from '../../../src/controllers/club/add-subscription.controller';
+import SubscriptionLogic from '../../../src/business-logic/subscription';
 import HTTPError from '../../../src/errors/http.error';
-import addValidation from '../../../src/validations/member.validations';
+import addValidation from '../../../src/validations/subscription.validations';
 
-jest.mock('../../../src/business-logic/member', () => ({
+jest.mock('../../../src/business-logic/subscription', () => ({
   create: jest.fn().mockReturnThis(),
 }));
 
 const mockReq = {
   body: {
-    name: 'John Doe',
-    email: 'johndoe@example.com',
+    name: 'Monthly subscription',
+    price: 10,
   },
   params: {
     clubId: '123',
@@ -26,7 +26,7 @@ const returnErrorResponse = ({ error, res }) => {
   return res.status(code).send({ error: { message } });
 };
 
-describe('Controller: Club: Add member', () => {
+describe('Controller: Club: Add subscription', () => {
   beforeEach(() => {
     mockRes = {
       status: jest.fn().mockReturnThis(),
@@ -38,15 +38,15 @@ describe('Controller: Club: Add member', () => {
     jest.resetAllMocks();
   });
 
-  it('Should add a member to the club', async () => {
-    MemberLogic.create.mockResolvedValue({ name: 'John Doe', email: 'johndoe@example.com' });
+  it('Should add a subscription to the club', async () => {
+    SubscriptionLogic.create.mockResolvedValue({ name: 'Monthly subscription', price: 10 });
 
-    await addMemberController(mockReq, mockRes);
+    await addSubscriptionController(mockReq, mockRes);
 
     expect(addValidation.validateAsync).toHaveBeenCalledWith(mockReq.body);
-    expect(MemberLogic.create).toHaveBeenCalledWith({ ...mockReq.body, clubId: mockReq.params.clubId, userId: mockReq.userId });
+    expect(SubscriptionLogic.create).toHaveBeenCalledWith({ ...mockReq.body, clubId: mockReq.params.clubId, userId: mockReq.userId });
     expect(mockRes.status).toHaveBeenCalledWith(201);
-    expect(mockRes.send).toHaveBeenCalledWith({ member: { name: 'John Doe', email: 'johndoe@example.com' } });
+    expect(mockRes.send).toHaveBeenCalledWith({ subscription: { name: 'Monthly subscription', price: 10 } });
   });
 
   it('Should return an error when validation fails', async () => {
@@ -54,10 +54,10 @@ describe('Controller: Club: Add member', () => {
 
     addValidation.validateAsync.mockRejectedValue(error);
 
-    await addMemberController(mockReq, mockRes);
+    await addSubscriptionController(mockReq, mockRes);
 
     expect(addValidation.validateAsync).toHaveBeenCalledWith(mockReq.body);
-    expect(MemberLogic.create).not.toHaveBeenCalled();
+    expect(SubscriptionLogic.create).not.toHaveBeenCalled();
     expect(mockRes.status).toHaveBeenCalledWith(400);
     expect(mockRes.send).toHaveBeenCalledWith({ error: { message: 'some-error' } });
   });
@@ -66,12 +66,12 @@ describe('Controller: Club: Add member', () => {
     const error = new HTTPError({ name: 'error', message: 'some-error', code: 500 });
 
     addValidation.validateAsync.mockResolvedValue();
-    MemberLogic.create.mockRejectedValue(error);
+    SubscriptionLogic.create.mockRejectedValue(error);
 
-    await addMemberController(mockReq, mockRes);
+    await addSubscriptionController(mockReq, mockRes);
 
     expect(addValidation.validateAsync).toHaveBeenCalledWith(mockReq.body);
-    expect(MemberLogic.create).toHaveBeenCalledWith({ ...mockReq.body, clubId: mockReq.params.clubId, userId: mockReq.userId });
+    expect(SubscriptionLogic.create).toHaveBeenCalledWith({ ...mockReq.body, clubId: mockReq.params.clubId, userId: mockReq.userId });
     expect(mockRes.status).toHaveBeenCalledWith(500);
     expect(mockRes.send).toHaveBeenCalledWith({ error: error });
   });
