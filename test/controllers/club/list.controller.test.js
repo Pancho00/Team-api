@@ -1,15 +1,15 @@
 import { expect, jest } from '@jest/globals';
-import UsersLogic from '../../../src/business-logic/users';
-import listController from '../../../src/controllers/user/list.controller';
+import ClubLogic from '../../../src/business-logic/club';
+import listController from '../../../src/controllers/club/list.controller';
 import HTTPError from '../../../src/errors/http.error';
 
-jest.mock('../../../src/business-logic/users', () => ({
+jest.mock('../../../src/business-logic/club', () => ({
   list: jest.fn().mockReturnThis(),
 }));
 
-let resMock = {};
+let resMock;
 
-describe('Controller: User: List users', () => {
+describe('Controller: Club: List clubs', () => {
   beforeEach(() => {
     resMock = {
       status: jest.fn().mockReturnThis(),
@@ -22,35 +22,35 @@ describe('Controller: User: List users', () => {
   });
 
   it('Should return a empty list', async () => {
-    UsersLogic.list.mockReturnValue([]);
+    ClubLogic.list.mockReturnValue([]);
 
     await listController({}, resMock);
 
     expect(resMock.status).toBeCalledWith(200);
-    expect(resMock.send).toBeCalledWith({ users: [] });
-    expect(UsersLogic.list).toHaveBeenCalled();
+    expect(resMock.send).toBeCalledWith({ clubs: [] });
+    expect(ClubLogic.list).toHaveBeenCalled();
   });
 
-  it('Should return a list of users', async () => {
-    const users = [{ name: 'user1', email: 'email@gmail.com' }];
-    UsersLogic.list.mockReturnValue(users);
+  it('Should return a list of clubs', async () => {
+    const clubs = [{ name: 'club1', description: 'description' }];
+    ClubLogic.list.mockReturnValue(clubs);
 
     await listController({}, resMock);
 
     expect(resMock.status).toBeCalledWith(200);
-    expect(resMock.send).toBeCalledWith({ users });
-    expect(UsersLogic.list).toHaveBeenCalled();
+    expect(resMock.send).toBeCalledWith({ clubs });
+    expect(ClubLogic.list).toHaveBeenCalled();
   });
 
   it('Should throw an error when the logic fails', async () => {
     const error = new HTTPError({ name: 'error', message: 'some-error', code: 400 });
 
-    UsersLogic.list.mockRejectedValue(error);
+    ClubLogic.list.mockRejectedValue(error);
 
     await listController({}, resMock);
 
     expect(resMock.status).toBeCalledWith(400);
     expect(resMock.send).toBeCalledWith({ error });
-    expect(UsersLogic.list).toHaveBeenCalled();
+    expect(ClubLogic.list).toHaveBeenCalled();
   });
 });

@@ -10,8 +10,8 @@ import { returnErrorResponse } from '../../errors/error-response';
 async function list(_req, res) {
   try {
     const clubs = await ClubLogic.list();
-
-    return res.send({ clubs });
+    
+    return res.status(200).send({ clubs});
   } catch (error) {
     return returnErrorResponse({ error, res });
   }
