@@ -15,7 +15,7 @@ async function listMembers(req, res) {
 
     const members = await MemberLogic.listByClub({ clubId, userId });
 
-    return res.send({ members });
+    return res.status(200).send({ members });
   } catch (error) {
     return returnErrorResponse({ error, res });
   }

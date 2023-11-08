@@ -15,7 +15,7 @@ async function listSubscriptions(req, res) {
 
     const subscriptions = await SubscriptionLogic.listByClub({ clubId, userId });
 
-    return res.send({ subscriptions });
+    return res.status(200).send({ subscriptions });
   } catch (error) {
     return returnErrorResponse({ error, res });
   }
